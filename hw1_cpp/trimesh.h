@@ -58,6 +58,8 @@ public:
     }
     
     const halfedge_t& halfedge( const index_t i ) const { return m_halfedges.at( i ); }
+
+    // const halfedge_t& halfedge_from_vertex( const index_t vertex_index ) const { return m_halfedges.at( m_vertex_halfedges.at( vertex_index ) ); }
     
     std::pair< index_t, index_t > he_index2directed_edge( const index_t he_index ) const
     {
@@ -194,6 +196,8 @@ public:
         }
         return Faces;
     };
+
+    
 
 private:
     std::vector< halfedge_t > m_halfedges;
