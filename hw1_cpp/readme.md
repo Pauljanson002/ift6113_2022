@@ -4,7 +4,12 @@ This code was melted together from [libigl-example-project](https://github.com/l
 **Remark**: This code might not be optimal, but it gets the work done.
 
 # Usage
-Provide short description on how to run your code from command line.
+<!-- Provide short description on how to run your code from command line. -->
+
+Use it as the following 
+`./example <path_of_the_obj_file> <num_iterations> <scheme_to_use>`
+
+Use 1 = Loop subdivision , 2 = butterfly subdivision
 
 ## Prerequisites
 Refer to libigl-tutorial for details: [libigl.github.io/tutorial/](https://libigl.github.io/tutorial/) and [libigl/libigl-example-project](https://github.com/libigl/libigl-example-project)
@@ -25,3 +30,4 @@ cmake ..
 make
 ./example
 ```
+

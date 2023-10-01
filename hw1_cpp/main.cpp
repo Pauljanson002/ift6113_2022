@@ -15,7 +15,7 @@ weighted average of its neighbors.
 
 */
 
-void subdivide( trimesh::trimesh_t& mesh, Eigen::MatrixXd& oldV, Eigen::MatrixXi& oldF, std::vector< trimesh::edge_t >& edges , Eigen::MatrixXd& newV, Eigen::MatrixXi& newF)
+void subdivide( trimesh::trimesh_t& mesh, Eigen::MatrixXd& oldV, Eigen::MatrixXi& oldF, std::vector< trimesh::edge_t >& edges , Eigen::MatrixXd& newV, Eigen::MatrixXi& newF ,int scheme)
 {
 
     // 1. insert new vertices
@@ -34,7 +34,7 @@ void subdivide( trimesh::trimesh_t& mesh, Eigen::MatrixXd& oldV, Eigen::MatrixXi
     std::vector<int> old_to_new(oldV.rows(), -1);
     std::map<std::pair<int,int>, int> edge_to_new;
     int indexcount = 0;
-    int scheme = 2;
+    // int scheme = 2;
     for (int i=0; i<oldF.rows(); ++i){
         Eigen::Vector3i face = oldF.row(i);
         // std::cout<< "\n" << face << "\n";
@@ -201,11 +201,11 @@ void subdivide( trimesh::trimesh_t& mesh, Eigen::MatrixXd& oldV, Eigen::MatrixXi
 
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Eigen::MatrixXd V;
     Eigen::MatrixXi F;
-    igl::read_triangle_mesh("../../input/bunny.obj", V,F);
+    igl::read_triangle_mesh(argv[1], V,F);
 
     // half-edges example
     // std::vector< trimesh::triangle_t > triangles;
@@ -238,9 +238,8 @@ int main(int argc, char *argv[])
     //     std::cout << '\n';
     // }
 
-    
-    //! Has to implement the subdivision scheme here 
-    for (int i=0; i<1 ; ++i){
+    int num_iterations = std::stoi(argv[2]);
+    for (int i=0; i<num_iterations ; ++i){
 
         int kNumVertices = V.rows();
         int kNumFaces = F.rows();
@@ -259,7 +258,8 @@ int main(int argc, char *argv[])
         mesh.build( kNumVertices, triangles.size(), &triangles[0], edges.size(), &edges[0] );
         Eigen::MatrixXd newV(V.rows() + edges.size(), V.cols());
         Eigen::MatrixXi newF(F.rows()*4, F.cols());
-        subdivide(mesh, V, F,edges, newV, newF);
+        int scheme = std::stoi(argv[3]);
+        subdivide(mesh, V, F,edges, newV, newF,scheme);
         V.resize(newV.rows(), newV.cols());
         F.resize(newF.rows(), newF.cols());
         V = newV ;
@@ -291,8 +291,8 @@ int main(int argc, char *argv[])
     
     // newV = mesh.get_vertices();
     // std::cout<< "\n" << newV << "\n";
-    // // output the mesh
-    // igl::writeOBJ("../output/cube.obj", newV, newF);
+    // output the mesh
+    igl::writeOBJ("../output/output.obj", V, F);
 
     // Plot the mesh
     // igl::opengl::glfw::Viewer viewer;
